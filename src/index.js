@@ -1,61 +1,87 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import propTypes from 'prop-types';
+import PropTypes from 'prop-types';
+import Table from 'react-bootstrap/lib/Table';
+import Row from 'react-bootstrap/lib/Row';
+import Col from 'react-bootstrap/lib/Col';
+import Panel from 'react-bootstrap/lib/Panel';
 import * as styles from './main.css';
+import userList from './users';
 
 const mountNode = document.querySelector('.app');
 
-import React from 'react';
-import ReactDOM from 'react-dom';
-
-const mountNode = document.querySelector('.app');
-const UserBody = (user) => {
-  const birthdate = getBirthdate(user.birthday);
-  const gender = getSex(user.gender);
-  (<div className ={`${bootstrap.col-md-9} ${bootstrap.col-lg-9}`}>
-      <table className={`${bootstrap.table} ${bootsrtap.table-user-information}`}>
-        <tbody>
-          <tr>
-            <td>Дата рождения</td>
-            <td>{birthdate}</td>
-          </tr>
-          <tr>
-            <td>Пол</td>
-            <td>{gender}</td>
-          </tr>
-          <tr>
-            <td>Адрес</td>
-            <td>{user.address}</td>
-          </tr>
-          <tr>
-            <td>Email</td>
-            <td><a>{user.email}</a></td>
-            </tr>
-        </tbody>
-      </table>
-    </div>)
+const getGender = (gender) => {
+  let userGender = 'MALE';
+  if (gender === 'женский') {
+    userGender = 'FEMALE';
   }
+  return userGender;
+};
 
-const User = (user) => {
- return (<div className={`${bootstrap.panel} ${bootstrap.panel-info}`}>
-  <div className={bootstrap.panel-heading}>
-    <h3 class="panel-title">USER FULL NAME !</h3>
-  </div>
-  <div class="panel-body">
-    <div class="row">
-      <div>
-        <div class="col-md-3 col-lg-3 " align="center">
-          <img src="http://psdexport.com/storage/avatars/default.png" class="pull-left">
-        </div>
-}
+const getBirthdate = (birthdate) => {
+  console.log(birthdate);
+  return birthdate.replace(/-/g, '.');
+};
 
-let someArray = ['Angular', 'Vue', 'React'];
+const UserBody = ({ user }) => {
+  const birthdate = getBirthdate(user.birthdate);
+  const gender = getGender(user.gender);
+  return (<Col lg={9} md={9}>
+    <Table bsClass="table-user-information">
+      <tbody>
+        <tr>
+          <td>Дата рождения</td>
+          <td>{birthdate}</td>
+        </tr>
+        <tr>
+          <td>Пол</td>
+          <td>{gender}</td>
+        </tr>
+        <tr>
+          <td>Адрес</td>
+          <td>{user.address}</td>
+        </tr>
+        <tr>
+          <td>Email</td>
+          <td><a>{user.email}</a></td>
+        </tr>
+      </tbody>
+    </Table>
+  </Col>);
+};
+UserBody.propTypes = {
+  user: PropTypes.object
+};
 
-const List = props => {
-  return <ul>
-    {props.arr.map(item => <li key={item}>{item}</li>)}
-  </ul>
-}
+const Title = ({ fullname }) => (<h3>{fullname}</h3>);
 
-ReactDOM.render(<List arr={someArray} />, mountNode);
+Title.propTypes = {
+  fullname: PropTypes.string
+};
 
+const User = ({ user }) => {
+  console.log('user', user);
+  return (<Panel header={<Title fullname={user.fullName} />} bsStyle="info">
+    <Row>
+      <Col lg={3} md={3} >
+        <img src={user.avatarUrl} alt={user.fullName} />
+      </Col>
+      <UserBody user={user} />
+    </Row>
+  </Panel >);
+};
+
+User.propTypes = {
+  user: PropTypes.object
+};
+
+
+const UserList = ({ users }) => (<ul className={styles.unstyled}>
+  {users.map(user => <li key={user.birthdate}><User user={user} /></li>)}
+</ul>);
+
+ReactDOM.render(<UserList users={userList} />, mountNode);
+
+UserList.propTypes = {
+  users: PropTypes.array
+};

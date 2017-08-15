@@ -27,3 +27,5 @@ const users = [
     email: 'ivanov@mail.ru'
   }
 ];
+
+export default users;

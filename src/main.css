@@ -1,3 +1,4 @@
-.block{
-    background: red;
+.unstyled{
+    list-style: none;
+    padding: 0;
 }
