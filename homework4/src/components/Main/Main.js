@@ -4,29 +4,23 @@ import './Main.css';
 import SignIn from '../Auth/SignIn';
 import SignUp from '../Auth/SignUp';
 import User from '../User/User';
+import Home from '../Home/Home';
 
 class Main extends Component {
-  constructor() {
-    super();
-    this.state = {
-      user: null,
-      loggedIn: false
-    }
-  }
-  setLoggedIn = () => {
-    this.setState({ loggedIn: true });
-  }
   render() {
-    const { user } = this.state;
+    const { user } = this.props;
+
     return (
       <div className="Main">
         <Switch>
-        {this.state.loggedIn && <Redirect to={`/${user}`} />}
+          <Route exact path='/' render={() =>
+            <Home />} />
           <Route exact path='/signin' render={() =>
-            <SignIn userLoggedIn={this.setLoggedIn} />} />
-          <Route exact path='/signup' component={SignUp} />
-          <Route exact path='/:user' render={user => (
-            <User {...user} />)} />
+            <SignIn userLoggedIn={(user) => this.props.setLoggedIn(user)} />} />
+          <Route exact path='/signup' render={() =>
+            <SignUp userSignedUp={this.props.setSignedUp} />} />
+          <Route exact path='/:user' render={() => (
+            <User user={user} />)} />
         </Switch>
       </div>
     )

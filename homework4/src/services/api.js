@@ -1,35 +1,26 @@
-const url = 'http://api.jyotish.gift/api/v1/auth/';
-/*
-
- const optionsTemp = {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-    },
-    body: `email=${email}&user=${name}&password=${password}`,
-    mode: 'no-cors'
+class Api{
+  constructor(){
+    this.url = 'http://api.jyotish.gift/api/v1/auth/'
   }
-*/
 
-export const requestSignIn = (name, password) => {
-  const optionsTemp = {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-    },
-    body: `user=${name}&password=${password}`,
-    mode: 'no-cors'
-  }
-  return fetch(url + 'login', optionsTemp).then(data => data.json()).catch(e => console.error(e));
+ requestSignIn = (user) => {
+  return this.fetch('login', user);
 }
 
-export const requestSignUp = (user) => {
+ requestSignUp = (user) => {
+  return this.fetch('signup/', user);
+}
+
+fetch=(url, requestBody)=>{
   const options = {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
-    }, body: JSON.stringify(user)
+    }, body: JSON.stringify(requestBody)
   };
-  return fetch(url + 'signup/', options).then(data => data.json()).then(data => data).catch(e => console.error(e));
+  return fetch(this.url + url, options).then(data => data.json()).then(data => {return data}).catch(e => console.error(e));
 }
 
+}
+
+export default Api = new Api();

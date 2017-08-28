@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { requestSignIn, requestSignUp } from '../../services/api';
+import { Redirect } from 'react-router-dom';
+import Api from '../../services/api';
 
 class SignIn extends Component {
   constructor() {
@@ -8,44 +9,51 @@ class SignIn extends Component {
       name: '',
       password: '',
       success: false,
-      error: false
+      error: false,
+      status: null
     }
   }
   showError = () => {
     this.setState({ error: true });
   }
   inputOnChange = (e) => {
-    if (e.target.name === 'name') {
-      this.setState({ [e.target.name]: e.target.value });
-    }
+    this.setState({ [e.target.name]: e.target.value });
   }
   signInOnSubmit = (e) => {
     e.preventDefault();
-    const signInStatus = requestSignIn(this.state.name, this.state.password);
-    console.log(signInStatus);
-    signInStatus.PromiseValue.status === 'success' ? this.props.userLoggedIn() : this.showError();
+    const signInStatus = Api.requestSignIn({ user: this.state.name, password: this.state.password });
+    signInStatus.then(data => {
+      console.log('signInData', data);
+      this.setState({ status: data.status, token: data.message.token, user: data.message.user });
+      console.log(this.state.status);
+      console.log(this.state.token);
+      this.state.status === 'success' ? this.props.userLoggedIn(data.message.user) : this.showError();
+    });
+
   }
 
   render() {
     return (
-      <form onSubmit={this.signInOnSubmit}>
-        <div>{this.state.error && 'Wrong login or password'}</div>
-        <label htmlFor="name">Name</label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          onChange={this.inputOnChange}
-        />
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          onChange={this.inputOnChange}
-        />
-        <button type='submit'>Sign in</button>
-      </form>
+      this.state.status === 'success' ?
+        <Redirect to={`/${this.state.user.name}`} /> :
+        <form onSubmit={this.signInOnSubmit}>
+          <div>{this.state.error && 'Wrong login or password'}</div>
+          <label htmlFor="name">Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            onChange={this.inputOnChange}
+          />
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            onChange={this.inputOnChange}
+          />
+          <button type='submit'>Sign in</button>
+        </form>
     )
   }
 }
