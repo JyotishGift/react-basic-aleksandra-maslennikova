@@ -6,9 +6,6 @@ class SignIn extends Component {
   constructor() {
     super();
     this.state = {
-      name: '',
-      password: '',
-      success: false,
       error: false,
       status: null
     }
@@ -23,19 +20,17 @@ class SignIn extends Component {
     e.preventDefault();
     const signInStatus = Api.requestSignIn({ user: this.state.name, password: this.state.password });
     signInStatus.then(data => {
-      console.log('signInData', data);
-      this.setState({ status: data.status, token: data.message.token, user: data.message.user });
-      console.log(this.state.status);
-      console.log(this.state.token);
-      this.state.status === 'success' ? this.props.userLoggedIn(data.message.user) : this.showError();
+      this.setState({ status: data.status });
+      localStorage.setItem('user', JSON.stringify(data.message.user));
+      localStorage.setItem('token', JSON.stringify(data.message.token));
+      this.state.status === 'success' ? this.props.userSignedIn(data.message.user) : this.showError();
     });
-
   }
 
   render() {
     return (
       this.state.status === 'success' ?
-        <Redirect to={`/${this.state.user.name}`} /> :
+        <Redirect to={`/`} /> :
         <form onSubmit={this.signInOnSubmit}>
           <div>{this.state.error && 'Wrong login or password'}</div>
           <label htmlFor="name">Name</label>

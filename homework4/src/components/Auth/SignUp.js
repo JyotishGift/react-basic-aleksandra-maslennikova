@@ -31,11 +31,9 @@ class SignUp extends Component {
 
   signUpOnSubmit = (e) => {
     e.preventDefault();
-
     if (this.passwordIsConfirmed()) {
       const signUpStatus = Api.requestSignUp({ email: this.state.email, user: this.state.name, password: this.state.password })
       signUpStatus.then(data => { this.setState({ status: data.status, message: data.message })
-      console.log('status', this.state.status);
       this.state.status === 'success' ? this.props.userSignedUp() : this.showError();})
     } else {
       this.setState({ passwordError: true })
