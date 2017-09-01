@@ -13,10 +13,13 @@ class Counter extends Component {
     );
   }
   render() {
+    console.log(this.props);
     const {
       counter,
       increment,
       decrement,
+      clearHistory,
+      deleteDublicates,
       history
     } = this.props;
     const counterHistory = this.showHistory(history);
@@ -30,6 +33,8 @@ class Counter extends Component {
         <button onClick={decrement}>DECREMENT</button>
         <span style={{ float: 'right' }}>
           {counterHistory}
+          <button onClick={clearHistory}>Clear</button>
+          <button onClick={deleteDublicates}>Delete dublicates</button>
         </span>
       </div>
     );
@@ -46,7 +51,6 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => {
-  // если мы решими передать события ниже по компонентам
   return {
     ...bindActionCreators(actions, dispatch)
   };

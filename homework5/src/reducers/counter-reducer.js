@@ -1,4 +1,4 @@
-import { DEC, INC } from '../actions/types';
+import { DEC, INC, CLEAR_HISTORY, DELETE_DUBLICATES } from '../actions/types';
 
 const initialState = {
   counter: 0,
@@ -18,6 +18,14 @@ const reducer = (state = initialState, action) => {
       const newCounter = state.counter - 1;
       newHistory.push(newCounter);
       return { ...state, counter: newCounter, history: newHistory };
+    }
+    case CLEAR_HISTORY: {
+      return { ...state, history: [] };
+    }
+    case DELETE_DUBLICATES: {
+      const newHistory = [...state.history];
+      const filteredHistory = newHistory.filter((item, index, arr) => arr.indexOf(item) === index);
+      return { ...state, history: filteredHistory };
     }
     default:
       return state;

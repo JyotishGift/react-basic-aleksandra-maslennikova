@@ -2,12 +2,6 @@
 // counter
 export const DEC = 'DEC';
 export const INC = 'INC';
+export const CLEAR_HISTORY = 'CLEAR_HISTORY';
+export const DELETE_DUBLICATES = 'DELETE_DUBLICATES';
 
-
-// user
-export const USER_SIGNING = 'USER_SIGNING';
-export const USER_SIGNUP = 'USER_SIGNUP';
-
-// auction
-
-//
