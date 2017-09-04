@@ -4,49 +4,41 @@ const initialState = {
   recipes: [
     {
       id: 1,
-      name: 'Pizza',
-      ingredients: [
-        { name: "ketchup", quantity: '20мл' },
-        { name: "cheese", quantity: '50g' },
-        { name: "salami", quantity: '100g' }
-      ]
+      name: 'Pizza'
     },
     {
       id: 2,
       name: 'Chicken',
-      ingredients: [
-        { name: "chicken", quantity: '1' },
-        { name: "sous", quantity: '50g' },
-        { name: "salt", quantity: '5g' }
-      ]
     },
     {
       id: 3,
       name: 'Soup',
-      ingredients: [
-        { name: "water", quantity: '2 liters' },
-        { name: "chicken", quantity: '500g' },
-        { name: "potato", quantity: '5p' }
-      ]
     },
     {
       id: 4,
       name: 'Risotto',
-      ingredients: [
-        { name: "water", quantity: '0.5 liters' },
-        { name: "rice", quantity: '100g' },
-        { name: "salt", quantity: '5g' }
-      ]
     },
     {
       id: 5,
-      name: 'Salad',
-      ingredients: [
-        { name: "salad", quantity: '100g' },
-        { name: "tomato", quantity: '300g' },
-        { name: "pepper", quantity: '200g' }
-      ]
+      name: 'Salad'
     }
+  ],
+  ingredients: [
+    { name: "ketchup", quantity: '20мл', recipeId: 1 },
+    { name: "cheese", quantity: '50g', recipeId: 1 },
+    { name: "salami", quantity: '100g', recipeId: 1 },
+    { name: "chicken", quantity: '1', recipeId: 2 },
+    { name: "sous", quantity: '50g', recipeId: 2 },
+    { name: "salt", quantity: '5g', recipeId: 2 },
+    { name: "water", quantity: '2 liters', recipeId: 3 },
+    { name: "chicken", quantity: '500g', recipeId: 3 },
+    { name: "potato", quantity: '5p', recipeId: 3 },
+    { name: "water", quantity: '0.5 liters', recipeId: 4 },
+    { name: "rice", quantity: '100g', recipeId: 4 },
+    { name: "salt", quantity: '5g', recipeId: 4 },
+    { name: "salad", quantity: '100g', recipeId: 5 },
+    { name: "tomato", quantity: '300g', recipeId: 5 },
+    { name: "pepper", quantity: '200g', recipeId: 5 }
   ],
   activeRecipe: 1
 }
@@ -57,10 +49,17 @@ const reducer = (state = initialState, action) => {
       return { ...state, activeRecipe: action.payload };
     }
     case DELETE_RECIPE: {
-      const newRecipes = [...state.recipes];
-      const index = newRecipes.findIndex(elem => elem.id === action.payload);
-      newRecipes.splice(index, 1);
-      return { ...state, recipes: newRecipes };
+      const newRecipes = [...state.recipes].filter(recipe => {
+        if (recipe.id !== action.payload) {
+          return { ...recipe }
+        }
+      });
+      const newIngredients = [...state.ingredients].filter(ingredient => {
+        if (ingredient.recipeId !== action.payload) {
+          return { ...ingredient }
+        }
+      });
+      return { ...state, recipes: newRecipes, ingredients: newIngredients };
     }
     default:
       return state;
