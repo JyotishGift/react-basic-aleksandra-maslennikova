@@ -3,7 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 
 import Counter from './Counter';
-import Recipes from './Recipes';
+import Recipes from './Recipes/Recipes.js';
 
 class App extends Component {
   render() {
